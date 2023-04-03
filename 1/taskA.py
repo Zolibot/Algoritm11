@@ -1,29 +1,11 @@
-# 84981822
-from typing import List
+# 85057742
+from collections.abc import Iterable
 from itertools import chain
+from typing import List
 
 
-def pattern3(i: int) -> List[int]:
-    data: List[int] = []
-    for j in range(i, 0, -1):
-        data.append(j)
-    return data
-
-
-def pattern2(i: int) -> List[int]:
-    data: List[int] = []
-    for j in range(1, i):
-        data.append(j)
-    return data
-
-
-def pattern(i: int) -> List[int]:
-    data: List[int] = []
-    hav_len = i // 2
-    itr = chain(range(1, 1 + hav_len), range(i - hav_len, 0, -1))
-    for x in itr:
-        data.append(x)
-    return data
+def pattern(itr: Iterable) -> List[int]:
+    return [int(x) for x in itr]
 
 
 def nearest_zeros(array: List[int], len_street: int) -> List[int]:
@@ -50,26 +32,33 @@ def nearest_zeros(array: List[int], len_street: int) -> List[int]:
         if x == 0:
             answer.append(x)
         elif i == 0 and x != 0:
-            answer += pattern3(x)
+            itr = range(x, 0, -1)
+            answer += pattern(itr)
         elif i == len_zeros - 1:
-            answer += pattern2(x)
+            itr = range(1, x)
+            answer += pattern(itr)
         elif i != len_zeros:
-            answer += pattern(x)
+            hav_len = x // 2
+            merge_itr = chain(range(1, 1 + hav_len), range(x - hav_len, 0, -1))
+            answer += pattern(merge_itr)
     return answer
 
 
 def load_data() -> None:
     file = open("./input.txt", "rt")
-    data = [list(map(int, a.split())) if not a.isdigit() else int(a) for a in file.read().split("\n")]
-    len_street: int = data[0]  # type: ignore
-    arr: List[int] = [data[1]] if isinstance(data[1], int) else data[1]  # type: ignore
+    data = []
+    for a in file.read().split("\n"):
+        data.append(list(map(int, a.split())) if not a.isdigit() else int(a))
+    len_street: int = data[0]
+    arr: List = [data[1]] if isinstance(data[1], int) else data[1]
     print_path(nearest_zeros(arr, len_street))
 
 
 def print_path(arr: List[int]) -> None:
-    print(" ".join(map(str, arr)))
+    # In this way speed up as opposed of "*arr"
+    # print(" ".join(map(str, arr)))
+    print(*arr)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     load_data()
-

@@ -7,6 +7,7 @@ def load_data() -> None:
     file = open("/run/media/greger/Disk_E/GRENOW/Dev/sprints/Algoritms/taskF/input.txt", "rt")
     data: str = file.read()
     data = data.strip().translate(str.maketrans('', '', punctuation)).lower()
+    print(data)
     print(is_palindrome(data))
 
 
