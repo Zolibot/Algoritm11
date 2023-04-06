@@ -8,6 +8,25 @@ def pattern(itr: Iterable) -> List[int]:
     return [int(x) for x in itr]
 
 
+def get_data(zero_list: List[int]) -> List[int]:
+    answer: List[int] = []
+    len_zeros: int = len(zero_list)
+    for i, x in enumerate(zero_list):
+        if x == 0:
+            answer.append(x)
+        elif i == 0 and x != 0:
+            itr = range(x, 0, -1)
+            answer += pattern(itr)
+        elif i == len_zeros - 1:
+            itr = range(1, x)
+            answer += pattern(itr)
+        elif i != len_zeros:
+            hav_len = x // 2
+            merge_itr = chain(range(1, 1 + hav_len), range(x - hav_len, 0, -1))
+            answer += pattern(merge_itr)
+    return answer
+
+
 def nearest_zeros(array: List[int], len_street: int) -> List[int]:
     zero_list: List[int] = []
     length: int = 0
@@ -25,23 +44,7 @@ def nearest_zeros(array: List[int], len_street: int) -> List[int]:
             length = 0
         if i == len_street:
             zero_list.append(length + 1)
-
-    answer: List[int] = []
-    len_zeros: int = len(zero_list)
-    for i, x in enumerate(zero_list):
-        if x == 0:
-            answer.append(x)
-        elif i == 0 and x != 0:
-            itr = range(x, 0, -1)
-            answer += pattern(itr)
-        elif i == len_zeros - 1:
-            itr = range(1, x)
-            answer += pattern(itr)
-        elif i != len_zeros:
-            hav_len = x // 2
-            merge_itr = chain(range(1, 1 + hav_len), range(x - hav_len, 0, -1))
-            answer += pattern(merge_itr)
-    return answer
+    return get_data(zero_list)
 
 
 def load_data() -> None:
